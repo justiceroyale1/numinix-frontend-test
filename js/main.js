@@ -104,13 +104,27 @@ const renderCustomerCard = (customer) => {
   return `<div class="card my-2">
   <img src="${getRandomPhotoUrl(
     customer.id
-  )}" class="card-img-top" alt="Customer's image" style="height:200px; object-fit:cover;" />
+  )}" class="card-img-top object-fit-cover d-none d-sm-block" alt="Customer's image" style="height:200px;" />
   <div class="card-body">
-    <h5 class="card-title">${customer.name}</h5>
-    <h6 class="card-subtitle mb-2 text-body-tertiary">@${customer.username}</h6>
-    <p class="card-subtitle my-4 text-info">"${
-      customer.company.catchPhrase
-    }"</p>
+    <div class="d-flex">
+      <div>
+        <h5 class="card-title">${customer.name}</h5>
+        <h6 class="card-subtitle mb-2 text-body-tertiary">@${
+          customer.username
+        }</h6>
+        <p class="card-subtitle my-4 text-info">"${
+          customer.company.catchPhrase
+        }"</p>
+      </div>
+      <div>
+      <img src="${getRandomPhotoUrl(
+        customer.id
+      )}" class="d-block d-sm-none object-fit-cover" alt="Customer's Image" style="height:120px;width:120px;border-radius:120px;">
+      </div>
+    </div>
+    <div class="d-block d-sm-none">
+      <hr>
+    </div>
     <p class="card-text">
       <i class="fa-solid fa-envelope text-primary"></i>
       <span class="ps-2">
