@@ -34,7 +34,7 @@ const debounce = (func, timeout = 300) => {
 const filterCustomers = () => {
   let searchString = $(CUSTOMERS_FILTER_ID).val();
   let filteredCustomers = customers.filter((element) =>
-    element.name.includes(searchString)
+    element.name.toUpperCase().includes(searchString.toUpperCase())
   );
 
   if (filteredCustomers.length > 0) {
@@ -82,6 +82,7 @@ const sortCustomers = (order = ASC_ORDER) => {
   }
 
   displayCustomers();
+  filterCustomers();
 };
 
 const getRandomPhotoUrl = (id) => {
