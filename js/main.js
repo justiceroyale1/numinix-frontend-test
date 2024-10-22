@@ -31,20 +31,23 @@ const debounce = (func, timeout = 300) => {
   };
 };
 
-const filterCustomers = () => {
+const filterCustomers = (sortResult = true) => {
   let searchString = $(CUSTOMERS_FILTER_ID).val();
   let filteredCustomers = customers.filter((element) =>
     element.name.toUpperCase().includes(searchString.toUpperCase())
   );
 
   if (filteredCustomers.length > 0) {
+    if (sortResult) {
+      filteredCustomers = sortCustomers(filteredCustomers);
+    }
     displayCustomers(filteredCustomers);
   } else {
     displayEmptyMessage();
   }
 };
 
-const updateSortButtonText = (order = ASC_ORDER) => {
+const updateSortButtonText = (order = ASC_ORDER, customersToSort) => {
   if (order == ASC_ORDER) {
     $(SORT_BTN_ID).text(ASC_SORT_BTN_TEXT);
   } else {
@@ -52,11 +55,11 @@ const updateSortButtonText = (order = ASC_ORDER) => {
   }
 };
 
-const sortCustomers = (order = ASC_ORDER) => {
+const sortCustomers = (customersToSort, order = ASC_ORDER) => {
   updateSortButtonText(order);
 
   if (order == ASC_ORDER) {
-    customers.sort((a, b) => {
+    customersToSort.sort((a, b) => {
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
       if (nameA < nameB) {
@@ -68,7 +71,7 @@ const sortCustomers = (order = ASC_ORDER) => {
       return 0;
     });
   } else {
-    customers.sort((a, b) => {
+    customersToSort.sort((a, b) => {
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
       if (nameB < nameA) {
@@ -81,8 +84,7 @@ const sortCustomers = (order = ASC_ORDER) => {
     });
   }
 
-  displayCustomers();
-  filterCustomers();
+  return customersToSort;
 };
 
 const getRandomPhotoUrl = (id) => {
@@ -207,10 +209,12 @@ $(document).ready(async () => {
   displayCustomers();
 
   $(ASC_SORT_BTN_ID).on("click", function () {
-    sortCustomers();
+    customers = sortCustomers(customers);
+    filterCustomers(false);
   });
   $(DESC_SORT_BTN_ID).on("click", function () {
-    sortCustomers("desc");
+    customers = sortCustomers(customers, "desc");
+    filterCustomers(false);
   });
 
   $(CUSTOMERS_FILTER_ID).on("input", debounce(filterCustomers));
